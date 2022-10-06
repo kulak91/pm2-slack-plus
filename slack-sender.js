@@ -8,6 +8,7 @@ module.exports = { sendToSlack };
 // Dependency
 const request = require('request');
 const os = require('os');
+import fetch from 'node-fetch';
 
 
 // Constants
@@ -23,11 +24,11 @@ const commonColor = '#2196F3';
  * @param {Message[]) messages - List of messages, ready to send.
  *                              This list can be trimmed and concated base on module configuration.
  */
-function sendToSlack(messages, config) {
+async function sendToSlack(messages, config) {
 
     // If a Slack URL is not set, we do not want to continue and nofify the user that it needs to be set
     if (!config.slack_url) {
-        return console.error("There is no Slack URL set, please set the Slack URL: 'pm2 set pm2-slack:slack_url https://slack_url'");
+        return console.error("There is no Slack URL set, please set the Slack URL: 'pm2 set @kulakovdmitr/pm2-slack:slack_url https://slack_url'");
     }
 
     let limitedCountOfMessages;
@@ -83,12 +84,19 @@ function sendToSlack(messages, config) {
     };
 
     // Finally, make the post request to the Slack Incoming Webhook
-    request(requestOptions, function(err, res, body) {
-        if (err) return console.error(err);
-        if (body !== 'ok') {
-            console.error('Error sending notification to Slack, verify that the Slack URL for incoming webhooks is correct. ' + messages.length + ' unsended message(s) lost.');
-        }
-    });
+
+    // request(requestOptions, function(err, res, body) {
+    //     if (err) return console.error(err);
+    //     if (body !== 'ok') {
+    //         console.error('Error sending notification to Slack, verify that the Slack URL for incoming webhooks is correct. ' + messages.length + ' unsended message(s) lost.');
+    //     }
+    // });
+
+    const response = await fetch(requestOptions.url, {
+    method: requestOptions.method,
+    body: JSON.stringify(requestOptions.body),
+    headers: {'Content-Type': 'application/json'}
+});
 }
 
 
