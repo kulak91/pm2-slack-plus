@@ -182,38 +182,40 @@ pm2.launchBus(function(err, bus) {
             case 'online':
                 description = 'My own App Has Been Started!!';
                 interactive = [{
-                  "type": "button",
-                  "text": {
+                  "name": "recommend",
+                  "text":  {
                     "type": "plain_text",
                     "emoji": true,
                     "text": "Reload"
                   },
-                  "style": "primary",
-                  "value": "click_me_123"
-                },
-                {
                   "type": "button",
+                  "style": "primary",
+                  "value": "recommend"
+              },
+              {
+                  "name": "no",
                   "text": {
                     "type": "plain_text",
                     "emoji": true,
                     "text": "Stop"
                   },
                   "style": "danger",
-                  "value": "click_me_123"
-                }];
+                  "type": "button",
+                  "value": "bad"
+              }];
                 break;
             case 'stop':
                 description = null;
                 interactive = [{
-                  "type": "button",
+                  "name": "recommend",
                   "text": {
                     "type": "plain_text",
                     "emoji": true,
                     "text": "Start Again"
                   },
-                  "style": "primary",
-                  "value": "click_me_123"
-                },]
+                  "type": "button",
+                  "value": "recommend"
+              }]
             case 'restart':
                 description = null;
                 break;
