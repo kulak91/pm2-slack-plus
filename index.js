@@ -183,22 +183,14 @@ pm2.launchBus(function(err, bus) {
                 description = 'My own App Has Been Started!!';
                 interactive = [{
                   "name": "recommend",
-                  "text":  {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "Reload"
-                  },
+                  "text":  "Reload",
                   "type": "button",
                   "style": "primary",
                   "value": "recommend"
               },
               {
                   "name": "no",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "Stop"
-                  },
+                  "text": "Stop",
                   "style": "danger",
                   "type": "button",
                   "value": "bad"
@@ -208,11 +200,7 @@ pm2.launchBus(function(err, bus) {
                 description = null;
                 interactive = [{
                   "name": "recommend",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "Start Again"
-                  },
+                  "text": "Start",
                   "type": "button",
                   "value": "recommend"
               }]
