@@ -176,6 +176,7 @@ pm2.launchBus(function(err, bus) {
         if (data.process.name === 'pm2-slack-plus') { return; } // Ignore messages of own module.
 
         let description = null;
+        let interactive = [];
         switch (data.event) {
             case 'start':
             case 'online':
