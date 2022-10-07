@@ -1,8 +1,10 @@
 "use strict";
 
 // Dependency
-const Scheduler = require('./scheduler');
-const slackSender = require('./slack-sender');
+// const Scheduler = require('./scheduler');
+// const slackSender = require('./slack-sender');
+import { slackSender } from './slack-sender';
+import Scheduler from './scheduler';
 
 /**
  * 

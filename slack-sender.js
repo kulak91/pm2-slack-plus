@@ -7,10 +7,10 @@ module.exports = { sendToSlack };
 
 // Dependency
 // const request = require('request');
-const os = require('os');
-// import fetch from 'node-fetch';
-const fetch = require('node-fetch');
-
+// const os = require('os');
+import os from 'os';
+import fetch from 'node-fetch';
+// const fetch = require('node-fetch');
 
 // Constants
 // The events that will trigger the color red
