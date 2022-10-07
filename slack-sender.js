@@ -50,9 +50,7 @@ async function sendToSlack(messages, config) {
 
     // Merge together all messages from same process and with same event
     // Convert messages to Slack message's attachments
-
-    payload.attachments = limitedCountOfMessages;
-    // payload.attachments = convertMessagesToSlackAttachments(mergeSimilarMessages(limitedCountOfMessages));
+    payload.attachments = convertMessagesToSlackAttachments(mergeSimilarMessages(limitedCountOfMessages));
 
     // Because Slack`s notification text displays the fallback text of first attachment only,
     // add list of message types to better overview about complex message in mobile notifications.
@@ -143,14 +141,13 @@ function convertMessagesToSlackAttachments(messages) {
         }
 
         var title = `${message.name} ${message.event}`;
-        var description = (message.description || '');
-        var fallbackText = title + 'fallback description here';
-        // var fallbackText = title + (description ? ': ' + description.replace(/[\r\n]+/g, ', ') : '');
+        var description = (message.description || '').trim();
+        var fallbackText = title + (description ? ': ' + description.replace(/[\r\n]+/g, ', ') : '');
         slackAttachments.push({
-            fallback: fallbackText,
+            fallback: escapeSlackText(fallbackText),
             color: color,
-            title: title,
-            text: description,
+            title: escapeSlackText(title),
+            text: escapeSlackText(description),
             ts: message.timestamp,
             // footer: message.name,
         });
@@ -167,9 +164,9 @@ function convertMessagesToSlackAttachments(messages) {
  * @param {string} text
  * @returns {string}
  */
-// function escapeSlackText(text) {
-//     return (text || '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
-// }
+function escapeSlackText(text) {
+    return (text || '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+}
 
 
 /**

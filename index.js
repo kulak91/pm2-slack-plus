@@ -177,29 +177,9 @@ pm2.launchBus(function(err, bus) {
 
         let description = null;
         switch (data.event) {
-          case 'start':
-          case 'online':
-                description = {
-                  "fallback": "Would you recommend it to customers?",
-                  "title": "Would you recommend it to customers?",
-                  "callback_id": "comic_1234_xyz",
-                  "color": "#3AA3E3",
-                  "attachment_type": "default",
-                  "actions": [
-                      {
-                          "name": "recommend",
-                          "text": "Recommend",
-                          "type": "button",
-                          "value": "recommend"
-                      },
-                      {
-                          "name": "no",
-                          "text": "No",
-                          "type": "button",
-                          "value": "bad"
-                      }
-                  ]
-              };
+            case 'start':
+            case 'online':
+                description = 'My own App Has Been Started!!';
                 break;
             case 'stop':
             case 'restart':
