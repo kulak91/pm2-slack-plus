@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "A PM2 module to emit events to Slack and more",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,8 +20,7 @@
   "dependencies": {
     "node-fetch": "^3.2.10",
     "pm2": "^0.15.10",
-    "pmx": "^0.5.5",
-    "request": "^2.67.0"
+    "pmx": "^0.5.5"
   },
   "config": {
     "slack_url": null,

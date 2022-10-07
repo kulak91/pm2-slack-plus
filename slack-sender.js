@@ -6,7 +6,7 @@ module.exports = { sendToSlack };
 
 
 // Dependency
-const request = require('request');
+// const request = require('request');
 const os = require('os');
 import fetch from 'node-fetch';
 
