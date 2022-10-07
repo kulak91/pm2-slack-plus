@@ -180,6 +180,18 @@ pm2.launchBus(function(err, bus) {
             case 'start':
             case 'online':
                 description = 'My own App Has Been Started!!';
+                interactive = [{
+                  "name": "recommend",
+                  "text": "Reload",
+                  "type": "button",
+                  "value": "recommend"
+              },
+              {
+                  "name": "no",
+                  "text": "Stop",
+                  "type": "button",
+                  "value": "bad"
+              }];
                 break;
             case 'stop':
             case 'restart':
@@ -195,6 +207,7 @@ pm2.launchBus(function(err, bus) {
             name: parseProcessName(data.process),
             event: data.event,
             description: description,
+            interactive: interactive,
             timestamp: Math.floor(Date.now() / 1000),
         });
     });

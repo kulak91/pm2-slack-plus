@@ -22,7 +22,7 @@ const commonColor = '#2196F3';
 /**
  * Sends immediately the message(s) to Slack's Incoming Webhook.
  *
- * @param {Message[]) messages - List of messages, ready to send.
+ * @param {Message[]} messages - List of messages, ready to send.
  *                              This list can be trimmed and concated base on module configuration.
  */
 async function sendToSlack(messages, config) {
@@ -127,7 +127,7 @@ function mergeSimilarMessages(messages) {
 /**
  * Converts messages to json format, that can be sent as Slack message's attachments.
  *
- * @param {Message[]) messages
+ * @param {Message[]} messages
  * @returns {SlackAttachment[]}
  */
 function convertMessagesToSlackAttachments(messages) {
@@ -142,12 +142,14 @@ function convertMessagesToSlackAttachments(messages) {
 
         var title = `${message.name} ${message.event}`;
         var description = (message.description || '').trim();
+        const interactive = message?.interactive || [''];
         var fallbackText = title + (description ? ': ' + description.replace(/[\r\n]+/g, ', ') : '');
         slackAttachments.push({
             fallback: escapeSlackText(fallbackText),
             color: color,
             title: escapeSlackText(title),
             text: escapeSlackText(description),
+            actions: interactive,
             ts: message.timestamp,
             // footer: message.name,
         });
