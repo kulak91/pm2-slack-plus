@@ -177,7 +177,8 @@ pm2.launchBus(function(err, bus) {
 
         let description = null;
         switch (data.event) {
-            case 'online':
+          case 'start':
+          case 'online':
                 description = {
                   "fallback": "Would you recommend it to customers?",
                   "title": "Would you recommend it to customers?",
@@ -200,7 +201,6 @@ pm2.launchBus(function(err, bus) {
                   ]
               };
                 break;
-            case 'start':
             case 'stop':
             case 'restart':
                 description = null;

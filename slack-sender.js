@@ -50,7 +50,9 @@ async function sendToSlack(messages, config) {
 
     // Merge together all messages from same process and with same event
     // Convert messages to Slack message's attachments
-    payload.attachments = convertMessagesToSlackAttachments(mergeSimilarMessages(limitedCountOfMessages));
+
+    payload.attachments = limitedCountOfMessages;
+    // payload.attachments = convertMessagesToSlackAttachments(mergeSimilarMessages(limitedCountOfMessages));
 
     // Because Slack`s notification text displays the fallback text of first attachment only,
     // add list of message types to better overview about complex message in mobile notifications.
