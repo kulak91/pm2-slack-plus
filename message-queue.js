@@ -37,11 +37,12 @@ MessageQueue.prototype.addMessageToQueue = function(message) {
         // Add message to buffer
         this.messageQueue.push(message);
         // Plan send the enqueued messages
-        this.scheduler.schedule(function() {
+        this.scheduler.schedule(async function() {
             // Remove waiting messages from global queue
             const messagesToSend = self.messageQueue.splice(0, self.messageQueue.length);
             
-            slackSender.sendToSlack(messagesToSend, self.config);
+            const response = await slackSender.sendToSlack(messagesToSend, self.config);
+            console.log('Response.. in message-que', response);
         });
     }
     

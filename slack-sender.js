@@ -98,6 +98,9 @@ async function sendToSlack(messages, config) {
     body: JSON.stringify(requestOptions.body),
     headers: {'Content-Type': 'application/json'}
 });
+console.log('Slack sender resonse', response);
+  return response.json();
+
 }
 
 
