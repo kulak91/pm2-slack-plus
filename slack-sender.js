@@ -141,13 +141,14 @@ function convertMessagesToSlackAttachments(messages) {
         }
 
         var title = `${message.name} ${message.event}`;
-        var description = (message.description || '').trim();
-        var fallbackText = title + (description ? ': ' + description.replace(/[\r\n]+/g, ', ') : '');
+        var description = (message.description || '');
+        var fallbackText = title + 'fallback description here';
+        // var fallbackText = title + (description ? ': ' + description.replace(/[\r\n]+/g, ', ') : '');
         slackAttachments.push({
-            fallback: escapeSlackText(fallbackText),
+            fallback: fallbackText,
             color: color,
-            title: escapeSlackText(title),
-            text: escapeSlackText(description),
+            title: title,
+            text: description,
             ts: message.timestamp,
             // footer: message.name,
         });
@@ -164,9 +165,9 @@ function convertMessagesToSlackAttachments(messages) {
  * @param {string} text
  * @returns {string}
  */
-function escapeSlackText(text) {
-    return (text || '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
-}
+// function escapeSlackText(text) {
+//     return (text || '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+// }
 
 
 /**
