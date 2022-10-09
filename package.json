@@ -49,6 +49,7 @@
     "queue_max": 100,
     "buffer_max_seconds": 20,
     "SLACK_SIGNING_SECRET": "",
-    "SLACK_BOT_TOKEN": ""
+    "SLACK_BOT_TOKEN": "",
+    "SLACK_APP_TOKEN": ""
   }
 }
