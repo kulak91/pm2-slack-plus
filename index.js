@@ -158,6 +158,8 @@ pm2.launchBus(function(err, bus) {
                   "type": "button",
                   "value": "recommend"
               }]
+              description = 'App stopped.';
+              break;
             case 'restart':
               description = 'App restarted.';
               break;

@@ -41,8 +41,7 @@ MessageQueue.prototype.addMessageToQueue = function(message) {
             // Remove waiting messages from global queue
             const messagesToSend = self.messageQueue.splice(0, self.messageQueue.length);
             
-            const response = await slackSender.sendToSlack(messagesToSend, self.config);
-            console.log('Response.. in message-que', response);
+            slackSender.sendToSlack(messagesToSend, self.config);
         });
     }
     
