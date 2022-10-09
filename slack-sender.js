@@ -8,8 +8,6 @@ module.exports = { sendToSlack };
 // Dependency
 // const request = require('request');
 const os = require('os');
-// import os from 'os';
-// import fetch from 'node-fetch';
 const fetch = require('node-fetch');
 
 // Constants
@@ -29,7 +27,7 @@ async function sendToSlack(messages, config) {
 
     // If a Slack URL is not set, we do not want to continue and nofify the user that it needs to be set
     if (!config.slack_url) {
-        return console.error("There is no Slack URL set, please set the Slack URL: 'pm2 set @kulakovdmitr/pm2-slack:slack_url https://slack_url'");
+        return console.error("There is no Slack URL set, please set the Slack URL: 'pm2 set pm2-slack-plus:slack_url https://slack_url'");
     }
 
     let limitedCountOfMessages;
@@ -97,10 +95,7 @@ async function sendToSlack(messages, config) {
     method: requestOptions.method,
     body: JSON.stringify(requestOptions.body),
     headers: {'Content-Type': 'application/json'}
-});
-console.log('Slack sender resonse', response);
-  return response;
-
+  });
 }
 
 
@@ -137,16 +132,16 @@ function convertMessagesToSlackAttachments(messages) {
     return messages.reduce(function(slackAttachments, message) {
 
         // The default color for events should be green
-        var color = commonColor;
+        let color = commonColor;
         // If the event is listed in redEvents, set the color to red
         if (redEvents.indexOf(message.event) > -1) {
             color = redColor;
         }
 
-        var title = `${message.name} ${message.event}`;
-        var description = (message.description || '').trim();
+        const title = `${message.name} ${message.event}`;
+        const description = (message.description || '').trim();
         const interactive = message?.interactive || [''];
-        var fallbackText = title + (description ? ': ' + description.replace(/[\r\n]+/g, ', ') : '');
+        const fallbackText = title + (description ? ': ' + description.replace(/[\r\n]+/g, ', ') : '');
         slackAttachments.push({
             fallback: escapeSlackText(fallbackText),
             color: color,

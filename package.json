@@ -2,7 +2,13 @@
   "name": "pm2-slack-plus",
   "version": "1.4.6",
   "description": "A PM2 module to emit events to Slack and more",
-  "main": "index.js",
+  "apps": [
+    {
+      "script": "index.js",
+      "merge_logs": true,
+      "max_memory_restart": "200M"
+    }
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,27 +23,32 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@slack/bolt": "^3.12.1",
+    "dotenv": "^16.0.3",
+    "node-cmd": "^5.0.0",
     "node-fetch": "2.6.7",
     "pm2": "^0.15.10",
     "pmx": "^0.5.5"
   },
   "config": {
     "slack_url": null,
-    "log": false,
+    "log": true,
     "error": true,
     "kill": true,
-    "exception": true,
+    "exception": false,
     "restart": false,
-    "reload": false,
+    "reload": true,
     "delete": false,
     "stop": false,
     "restart overlimit": true,
-    "exit": false,
-    "start": false,
-    "online": false,
+    "exit": true,
+    "start": true,
+    "online": true,
     "buffer": true,
     "buffer_seconds": 2,
     "queue_max": 100,
-    "buffer_max_seconds": 20
+    "buffer_max_seconds": 20,
+    "SLACK_SIGNING_SECRET": "",
+    "SLACK_BOT_TOKEN": ""
   }
 }

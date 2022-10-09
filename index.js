@@ -3,8 +3,9 @@
 // Dependency
 const pm2 = require('pm2');
 const pmx = require('pmx');
+const app = require('./slack-receiver');
 const MessageQueue = require('./message-queue');
-
+const { parseIncommingLog, parseProcessName } = require('./utils');
 
 /**
  * Get the configuration from PM2
@@ -14,43 +15,6 @@ const MessageQueue = require('./message-queue');
  */
 
 const moduleConfig = pmx.initModule();
-
-
-/**
- * New PM2 is storing log messages with date in format "YYYY-MM-DD hh:mm:ss +-zz:zz"
- * Parses this date from begin of message
- *
- * @param {string} logMessage
- * @returns {{description:string|null, timestamp:number|null}}
- */
-function parseIncommingLog(logMessage) {
-    let description = null;
-    let timestamp = null;
-
-    if (typeof logMessage === "string") {
-        // Parse date on begin (if exists)
-        const dateRegex = /([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{1,2}:[0-9]{2}:[0-9]{2}(\.[0-9]{3})? [+\-]?[0-9]{1,2}:[0-9]{2}(\.[0-9]{3})?)[:\-\s]+/;
-        const parsedDescription = dateRegex.exec(logMessage);
-        // Note: The `parsedDescription[0]` is datetime with separator(s) on the end.
-        //       The `parsedDescription[1]` is datetime only (without separators).
-        //       The `parsedDescription[2]` are ".microseconds"
-        if (parsedDescription && parsedDescription.length >= 2) {
-            // Use timestamp from message
-            timestamp = Math.floor(Date.parse(parsedDescription[1]) / 1000);
-            // Use message without date
-            description = logMessage.replace(parsedDescription[0], "");
-        } else {
-            // Use whole original message
-            description = logMessage;
-        }
-    }
-
-    return {
-        description: description,
-        timestamp: timestamp
-    }
-}
-
 
 const slackUrlRouter = {
     /**
@@ -95,18 +59,6 @@ const slackUrlRouter = {
 };
 
 
-/**
- * Get pm2 app display name.
- * If the app is running in cluster mode, id will append [pm_id] as the suffix.
- *
- * @param {object} process
- * @returns {string} name
- */
-function parseProcessName(process) {
-    return process.name + (process.exec_mode === 'cluster_mode' && process.instances > 1 ? `[${process.pm_id}]` : '');
-}
-
-
 // ----- APP INITIALIZATION -----
 
 // Start listening on the PM2 BUS
@@ -130,8 +82,10 @@ pm2.launchBus(function(err, bus) {
     // Listen for process errors
     if (moduleConfig.error) {
         bus.on('log:err', function(data) {
-            if (data.process.name === 'pm2-slack-plus') { return; } // Ignore messages of own module.
 
+          
+          if (data.data.includes('DeprecationWarning')) return;
+          // if (data.process.name === 'pm2-slack-plus') { return; } // Ignore messages of own module.
             const parsedLog = parseIncommingLog(data.data);
             slackUrlRouter.addMessage({
                 name: parseProcessName(data.process),
@@ -180,7 +134,7 @@ pm2.launchBus(function(err, bus) {
         switch (data.event) {
             case 'start':
             case 'online':
-                description = 'My own App Has Been Started!!';
+                description = `${data.process.name} started`;
                 interactive = [{
                   "name": "recommend",
                   "text":  "Reload",
@@ -205,12 +159,14 @@ pm2.launchBus(function(err, bus) {
                   "value": "recommend"
               }]
             case 'restart':
-                description = null;
-                break;
-
+              description = 'App restarted.';
+              break;
+            case 'exit':
+              description = 'App closed.';
+              break;
             case 'restart overlimit':
-                description = 'Process has been stopped. Check and fix the issue.';
-                break;
+              description = 'Process has been stopped. Check and fix the issue.';
+              break;
 
         }
         slackUrlRouter.addMessage({
@@ -223,6 +179,12 @@ pm2.launchBus(function(err, bus) {
     });
 });
 
+
+(async () => {
+  await app.start();
+
+  console.log('Slack bot is ready.');
+})();
 
 /**
  * @typedef {Object} Message
