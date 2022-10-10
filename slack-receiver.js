@@ -2,8 +2,8 @@ const { App } = require('@slack/bolt');
 const { list, restart } = require('./pm2-helper');
 const { timeSince } = require('./utils');
 require('dotenv').config();
-const exec = require('shelljs').exec;
-
+// const exec = require('shelljs').exec;
+const path = require('path');
 
 
 const app = new App({
@@ -108,15 +108,11 @@ app.action('button-reload', async ({ body, ack, say }) => {
   
   await say(`<@${body.user.id}> clicked the button\nHe wants to restart ecosystem`);
 
-  await restart('ecosystem.config.js');
-  // exec("pm2 reload ecosystem.config.js", (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error(`exec error: ${error}`);
-  //     return;
-  //   }
-  //   console.log(`stdout: ${stdout}`);
-  //   console.error(`stderr: ${stderr}`);
-  // });
+  // console.log('Restart response: ', response);
+  const configPath = path.join(process.env.PWD, 'ecosystem.config.js');
+  const response =  await restart(configPath);
+//  = path.resolve(__dirname, 'ecosystem.config.js');
+  console.log(response);
 });
 
 app.message('thx', async ({ message, say }) => {

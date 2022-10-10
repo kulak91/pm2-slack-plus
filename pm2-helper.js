@@ -21,15 +21,15 @@ const listAsync = () => {
 const restartAsync = (process) => {
   return new Promise((resolve, reject) => {
     
-    pm2.actionFromJson('restartProcessId', process, 'file', (err, proc) => {
-      if (err) reject(err);
-      resolve(proc);
-    });
-    
-    // pm2.restart(process, (err, proc) => {
+    // pm2.actionFromJson('restartProcessId', process, 'file', (err, proc) => {
     //   if (err) reject(err);
     //   resolve(proc);
     // });
+
+    pm2.restart(process, (err, proc) => {
+      if (err) reject(err);
+      resolve(proc);
+    });
   });
 };
 
@@ -60,9 +60,7 @@ async function restart(process) {
   try {
     await connectAsync();
     let _test = await describeAsync(process);
-    if (_test.pm2_env.pm_exec_path == module.parent.parent.filename) {
-      throw Error("Can not restart PM2 BOT");
-    }
+    console.log(_test);
     let response = await restartAsync(process);
     return { err: undefined, response };
   } catch (err) {
