@@ -1,5 +1,5 @@
 const { App } = require('@slack/bolt');
-const { list, restart } = require('./pm2-helper');
+const { list, restart, describe } = require('./pm2-helper');
 const { timeSince } = require('./utils');
 require('dotenv').config();
 const path = require('path');
@@ -114,6 +114,16 @@ app.action('button-reload', async ({ body, ack, say }) => {
   // });
 
   const response =  await restart('BinaryStrapi');
+
+  const serverProcess = await describe('BinaryStrapi');
+  if (!serverProcess) return;
+  const serverPath = path.resolve(serverProcess.pm_cwd);
+  const child = exec(`cd ${serverPath}; pm2 reload ecosystem.config.js`, {async : true});
+
+  child.stdout.on('end', function() {
+    console.log('Reload ended.');
+  });
+  
 //  = path.resolve(__dirname, 'ecosystem.config.js');
   // console.log(response);
 });

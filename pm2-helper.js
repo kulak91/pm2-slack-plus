@@ -91,4 +91,4 @@ async function describe(process) {
     pm2.disconnect();
   }
 }
-module.exports = { list, restart };
+module.exports = { list, restart, describe };
