@@ -109,10 +109,10 @@ app.action('button-reload', async ({ body, ack, say }) => {
 
   // console.log('Restart response: ', response);
   const currentDir = __dirname;
-  console.log('current dir: ', currentDir);
-  const configPath = path.join(process.env.PWD, 'ecosystem.config.js');
-  console.log('configPath', configPath);
-  const child = exec("pm2 reload ecosystem.config.js", {async : true});
+  // console.log('current dir: ', currentDir);
+  // const configPath = path.join(process.env.PWD, 'ecosystem.config.js');
+  // console.log('configPath', configPath);
+  const child = exec("cd ~/Binary-studio/astro-website/website/server; pm2 reload ecosystem.config.js", {async : true});
 
   child.stdout.on('end', function() {
     console.log('Reload ended.');
