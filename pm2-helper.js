@@ -84,6 +84,7 @@ async function describe(process) {
   try {
     await connectAsync();
     let response = await describeAsync(process);
+    console.log('response describe:', response);
     return { err: undefined, response };
   } catch (err) {
     return { err, response: undefined };

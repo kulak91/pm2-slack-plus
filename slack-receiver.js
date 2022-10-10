@@ -113,17 +113,17 @@ app.action('button-reload', async ({ body, ack, say }) => {
   //   console.log('Reload ended.');
   // });
 
-  const response =  await restart('BinaryStrapi');
+  // const response =  await restart('BinaryStrapi');
 
   const serverProcess = await describe('BinaryStrapi');
   if (!serverProcess) return;
-  const serverPath = path.resolve(serverProcess.pm_cwd);
+  const serverPath = path.resolve(serverProcess?.pm2_env?.pm_cwd);
   const child = exec(`cd ${serverPath}; pm2 reload ecosystem.config.js`, {async : true});
 
   child.stdout.on('end', function() {
     console.log('Reload ended.');
   });
-  
+
 //  = path.resolve(__dirname, 'ecosystem.config.js');
   // console.log(response);
 });
