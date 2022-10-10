@@ -135,29 +135,8 @@ pm2.launchBus(function(err, bus) {
             case 'start':
             case 'online':
                 description = `${data.process.name} started`;
-                interactive = [{
-                  "name": "recommend",
-                  "text":  "Reload",
-                  "type": "button",
-                  "style": "primary",
-                  "value": "recommend"
-              },
-              {
-                  "name": "no",
-                  "text": "Stop",
-                  "style": "danger",
-                  "type": "button",
-                  "value": "bad"
-              }];
                 break;
             case 'stop':
-                description = null;
-                interactive = [{
-                  "name": "recommend",
-                  "text": "Start",
-                  "type": "button",
-                  "value": "recommend"
-              }]
               description = 'App stopped.';
               break;
             case 'restart':
