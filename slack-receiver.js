@@ -110,7 +110,7 @@ app.action('button-reload', async ({ body, ack, say }) => {
 
   // console.log('Restart response: ', response);
   const configPath = path.join(process.env.PWD, 'ecosystem.config.js');
-  const response =  await restart(configPath);
+  const response =  await restart('all');
 //  = path.resolve(__dirname, 'ecosystem.config.js');
   console.log(response);
 });
