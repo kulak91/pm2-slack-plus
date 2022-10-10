@@ -83,7 +83,7 @@ app.message('list', async ({ message, say }) => {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": `To start *${proc.name}* click the button: `
+          "text": `To reload *ecosystem.config* click the button: `
         },
         "accessory": {
           "type": "button",
@@ -93,7 +93,7 @@ app.message('list', async ({ message, say }) => {
             "emoji": true
           },
           "value": `${proc.name}`,
-          "action_id": `button-action`
+          "action_id": `button-reload`
         }
       })
     }
@@ -102,20 +102,21 @@ app.message('list', async ({ message, say }) => {
 }
 );
 
-app.action('button-action', async ({ body, ack, say }) => {
+app.action('button-reload', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
   
-  await say(`<@${body.user.id}> clicked the button\nHe wants to restart: ${body.actions.map(action => action.value)}`);
+  await say(`<@${body.user.id}> clicked the button\nHe wants to restart ecosystem`);
 
-  exec("pm2 reload ecosystem.config.js", (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-    console.error(`stderr: ${stderr}`);
-  });
+  await restart('ecosystem.config.js');
+  // exec("pm2 reload ecosystem.config.js", (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`exec error: ${error}`);
+  //     return;
+  //   }
+  //   console.log(`stdout: ${stdout}`);
+  //   console.error(`stderr: ${stderr}`);
+  // });
 });
 
 app.message('thx', async ({ message, say }) => {

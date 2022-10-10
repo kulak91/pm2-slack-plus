@@ -20,10 +20,16 @@ const listAsync = () => {
 
 const restartAsync = (process) => {
   return new Promise((resolve, reject) => {
-    pm2.restart(process, (err, proc) => {
+    
+    pm2.actionFromJson('restartProcessId', process, 'file', (err, proc) => {
       if (err) reject(err);
       resolve(proc);
     });
+    
+    // pm2.restart(process, (err, proc) => {
+    //   if (err) reject(err);
+    //   resolve(proc);
+    // });
   });
 };
 
