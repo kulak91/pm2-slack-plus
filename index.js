@@ -160,12 +160,13 @@ pm2.launchBus(function(err, bus) {
     });
 });
 
-
-(async () => {
-  await app.start();
-
-  console.log('Slack bot is ready.');
-})();
+if (moduleConfig["SLACK_SIGNING_SECRET"] && moduleConfig["SLACK_BOT_TOKEN"] && moduleConfig["SLACK_APP_TOKEN"]) {
+  (async () => {
+    await app.start();
+  
+    console.log('Slack bot is ready.');
+  })();
+}
 
 /**
  * @typedef {Object} Message

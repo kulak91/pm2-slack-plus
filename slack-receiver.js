@@ -107,18 +107,13 @@ app.action('button-reload', async ({ body, ack, say }) => {
   
   await say(`<@${body.user.id}> clicked the button\nHe wants to restart ecosystem`);
 
-  // console.log('Restart response: ', response);
-  const currentDir = __dirname;
-  // console.log('current dir: ', currentDir);
-  // const configPath = path.join(process.env.PWD, 'ecosystem.config.js');
-  // console.log('configPath', configPath);
-  const child = exec("cd ~/app; pm2 reload ecosystem.config.js", {async : true});
+  // const child = exec("cd ~/app; pm2 reload ecosystem.config.js", {async : true});
 
-  child.stdout.on('end', function() {
-    console.log('Reload ended.');
-  });
+  // child.stdout.on('end', function() {
+  //   console.log('Reload ended.');
+  // });
 
-  // const response =  await restart('ecosystem.config.js');
+  const response =  await restart('BinaryStrapi');
 //  = path.resolve(__dirname, 'ecosystem.config.js');
   // console.log(response);
 });

@@ -26,6 +26,8 @@ const restartAsync = (process) => {
     //   resolve(proc);
     // });
 
+
+
     pm2.restart(process, (err, proc) => {
       if (err) reject(err);
       resolve(proc);
@@ -60,8 +62,9 @@ async function restart(process) {
   try {
     await connectAsync();
     let _test = await describeAsync(process);
-    console.log(_test);
+    console.log('test: ', _test);
     let response = await restartAsync(process);
+    console.log('response restart: ', response);
     return { err: undefined, response };
   } catch (err) {
     return { err, response: undefined };
