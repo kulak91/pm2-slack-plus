@@ -110,7 +110,7 @@ app.action('button-reload', async ({ body, ack, say }) => {
 
   // console.log('Restart response: ', response);
   const configPath = path.join(process.env.PWD, 'ecosystem.config.js');
-  const response =  await restart('all');
+  const response =  await restart('ecosystem.config.js');
 //  = path.resolve(__dirname, 'ecosystem.config.js');
   console.log(response);
 });
@@ -120,10 +120,5 @@ app.message('thx', async ({ message, say }) => {
   await say(`You're welcome <@${message.user}>!`);
 });
 
-// (async () => {
-//   await app.start(process.env.PORT || 6666);
-
-//   console.log('⚡️ Bolt app is running!');
-// })();
 
 module.exports = app;
