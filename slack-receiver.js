@@ -2,7 +2,7 @@ const { App } = require('@slack/bolt');
 const { list, restart } = require('./pm2-helper');
 const { timeSince } = require('./utils');
 require('dotenv').config();
-const { exec } = require('child_process');
+const exec = require('shelljs').exec;
 
 
 
