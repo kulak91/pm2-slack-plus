@@ -115,9 +115,9 @@ app.action('button-reload', async ({ body, ack, say }) => {
 
   // const response =  await restart('BinaryStrapi');
 
-  const serverProcess = await describe('BinaryStrapi');
-  if (!serverProcess) return;
-  const serverPath = path.resolve(serverProcess?.pm2_env?.pm_cwd);
+  const {err, response } = await describe('BinaryStrapi');
+  if (!response) return;
+  const serverPath = path.resolve(response?.pm2_env?.pm_cwd);
   const child = exec(`cd ${serverPath}; pm2 reload ecosystem.config.js`, {async : true});
 
   child.stdout.on('end', function() {
