@@ -2,7 +2,7 @@ const { App } = require('@slack/bolt');
 const { list, restart } = require('./pm2-helper');
 const { timeSince } = require('./utils');
 require('dotenv').config();
-const { spawn } = require('child_process');
+const { exec } = require('child_process');
 
 
 
@@ -108,22 +108,14 @@ app.action('button-action', async ({ body, ack, say }) => {
   
   await say(`<@${body.user.id}> clicked the button\nHe wants to restart: ${body.actions.map(action => action.value)}`);
 
-  const pmReload = spawn("pm2", ["reload", "ecosystem.config.js"]);
-  pmReload.stdout.on("data", data => {
-    console.log(`stdout: ${data}`);
-});
-
-pmReload.stderr.on("data", data => {
-    console.log(`stderr: ${data}`);
-});
-
-pmReload.on('error', (error) => {
-    console.log(`error: ${error.message}`);
-});
-
-pmReload.on("close", code => {
-    console.log(`child process exited with code ${code}`);
-});
+  exec("pm2 reload ecosystem.config.js", (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  });
 });
 
 app.message('thx', async ({ message, say }) => {
