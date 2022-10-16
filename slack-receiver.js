@@ -80,7 +80,7 @@ app.message('list', async ({ message, say }) => {
     //   answer.blocks.push()
     // }
   }
-  answer.push(
+  answer.blocks.push(
     {
       "type": "section",
       "text": {
