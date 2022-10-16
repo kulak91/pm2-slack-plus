@@ -13,9 +13,7 @@ const app = new App({
   port: process.env.SLACK_APP_PORT || 6666
 });
 
-// Listens to incoming messages that contain "hello"
 app.message('hello', async ({ message, say }) => {
-  // say() sends a message to the channel where the event was triggered
   await say(`Hey there <@${message.user}>!\nIf you want to see the list of available commands type in chat: "help"`);
 });
 
@@ -76,13 +74,12 @@ app.message('list', async ({ message, say }) => {
             "text": `*ID:* ${proc.pm_id}`
           },
         ]
-      })
-    if (proc.pm2_env.status !== "online") {
-      answer.blocks.push({
+      },
+      {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": `To reload *ecosystem.config* click the button: `
+          "text": `Force reload *ecosystem.config* : `
         },
         "accessory": {
           "type": "button",
@@ -95,8 +92,11 @@ app.message('list', async ({ message, say }) => {
           "value": `${proc.name}`,
           "action_id": `button-reload`
         }
-      })
-    }
+      }
+    )
+    // if (proc.pm2_env.status !== "online") {
+    //   answer.blocks.push()
+    // }
   }
   await say(answer)
 }
@@ -106,18 +106,24 @@ app.action('button-reload', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
 
+  const adminUsers = ['U045UMM99FC', 'U044B66LTUZ'];
+
   await say(`<@${body.user.id}> clicked the button\nHe wants to restart ecosystem`);
 
-  // const child = exec("cd ~/app; pm2 reload ecosystem.config.js", {async : true});
-
-  // child.stdout.on('end', function() {
-  //   console.log('Reload ended.');
-  // });
+  if (!adminUsers.find(user => user === body.user.id)) {
+    await say(`<@${body.user.name}> has no permissions to reload.`);
+    return;
+  }
 
   // const response =  await restart('BinaryStrapi');
 
   const { err, response } = await describe('BinaryStrapi');
-  if (!response) return;
+
+  if (!response) {
+    await say('App is not running. Please start ecosystem manually.')
+    return;
+  }
+
   const serverPath = path.resolve(response?.pm2_env?.pm_cwd);
   const child = exec(`cd ${serverPath}; pm2 reload ecosystem.config.js`, { async: true });
 
