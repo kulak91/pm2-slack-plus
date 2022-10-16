@@ -4,7 +4,7 @@ const { timeSince } = require('./utils');
 require('dotenv').config();
 const path = require('path');
 const exec = require('shelljs').exec;
-  
+
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
@@ -44,39 +44,39 @@ app.message('list', async ({ message, say }) => {
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": `${proc.name}`,
+        "text": `${proc.name === 'pm2-slack-plus' ? proc.name + ' - MODULE' : proc.name}`,
         "emoji": true
       }
     },
-    {
-      "type": "section",
-      "fields": [
-        {
-          "type": "mrkdwn",
-          "text": `*Status:* ${proc.pm2_env.status} ${status[proc.pm2_env.status] || ""}`
-        },
-        {
-          "type": "mrkdwn",
-          "text": `*Uptime:* ${proc.pm2_env.status === "online" ? timeSince(proc.pm2_env.pm_uptime) : '0'}`
-        },
-        {
-          "type": "mrkdwn",
-          "text": `*MEM:* ${Math.round(proc.monit.memory / 1024 / 1024)}Mb`
-        },
-        {
-          "type": "mrkdwn",
-          "text": `*Restarts Count:* ${proc.pm2_env.restart_time}`,
-        },
-        {
-          "type": "mrkdwn",
-          "text": `*CPU:* ${proc.monit.cpu} %`
-        },        
-        {
-          "type": "mrkdwn",
-          "text": `*ID:* ${proc.pm_id}`
-        },        
-      ]
-    })
+      {
+        "type": "section",
+        "fields": [
+          {
+            "type": "mrkdwn",
+            "text": `*Status:* ${proc.pm2_env.status} ${status[proc.pm2_env.status] || ""}`
+          },
+          {
+            "type": "mrkdwn",
+            "text": `*Uptime:* ${proc.pm2_env.status === "online" ? timeSince(proc.pm2_env.pm_uptime) : '0'}`
+          },
+          {
+            "type": "mrkdwn",
+            "text": `*MEM:* ${Math.round(proc.monit.memory / 1024 / 1024)}Mb`
+          },
+          {
+            "type": "mrkdwn",
+            "text": `*Restarts Count:* ${proc.pm2_env.restart_time}`,
+          },
+          {
+            "type": "mrkdwn",
+            "text": `*CPU:* ${proc.monit.cpu} %`
+          },
+          {
+            "type": "mrkdwn",
+            "text": `*ID:* ${proc.pm_id}`
+          },
+        ]
+      })
     if (proc.pm2_env.status !== "online") {
       answer.blocks.push({
         "type": "section",
@@ -91,6 +91,7 @@ app.message('list', async ({ message, say }) => {
             "text": "Start",
             "emoji": true
           },
+          "style": "primary",
           "value": `${proc.name}`,
           "action_id": `button-reload`
         }
@@ -104,7 +105,7 @@ app.message('list', async ({ message, say }) => {
 app.action('button-reload', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
-  
+
   await say(`<@${body.user.id}> clicked the button\nHe wants to restart ecosystem`);
 
   // const child = exec("cd ~/app; pm2 reload ecosystem.config.js", {async : true});
@@ -115,23 +116,17 @@ app.action('button-reload', async ({ body, ack, say }) => {
 
   // const response =  await restart('BinaryStrapi');
 
-  const {err, response } = await describe('BinaryStrapi');
-  console.log('Response?? ', response);
+  const { err, response } = await describe('BinaryStrapi');
   if (!response) return;
   const serverPath = path.resolve(response?.pm2_env?.pm_cwd);
-  console.log('serv path: ', serverPath)
-  const child = exec(`cd ${serverPath}; pm2 reload ecosystem.config.js`, {async : true});
+  const child = exec(`cd ${serverPath}; pm2 reload ecosystem.config.js`, { async: true });
 
-  child.stdout.on('end', function() {
-    console.log('Reload ended.');
+  child.stdout.on('end', async function () {
+    await say('Reloaded.');
   });
-
-//  = path.resolve(__dirname, 'ecosystem.config.js');
-  // console.log(response);
 });
 
 app.message('thx', async ({ message, say }) => {
-  // say() sends a message to the channel where the event was triggered
   await say(`You're welcome <@${message.user}>!`);
 });
 
