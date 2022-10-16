@@ -74,30 +74,31 @@ app.message('list', async ({ message, say }) => {
             "text": `*ID:* ${proc.pm_id}`
           },
         ]
-      },
-      {
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": `Force reload *ecosystem.config* : `
-        },
-        "accessory": {
-          "type": "button",
-          "text": {
-            "type": "plain_text",
-            "text": "Start",
-            "emoji": true
-          },
-          "style": "primary",
-          "value": `${proc.name}`,
-          "action_id": `button-reload`
-        }
       }
     )
     // if (proc.pm2_env.status !== "online") {
     //   answer.blocks.push()
     // }
   }
+  answer.push(
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": `Force reload *ecosystem.config* : `
+      },
+      "accessory": {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "Reload",
+          "emoji": true
+        },
+        "style": "primary",
+        "value": `reload`,
+        "action_id": `button-reload`
+      }
+    })
   await say(answer)
 }
 );
