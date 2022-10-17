@@ -1,16 +1,18 @@
 const { App } = require('@slack/bolt');
 const { list, restart, describe } = require('./pm2-helper');
 const { timeSince } = require('./utils');
-require('dotenv').config();
 const path = require('path');
+const pmx = require('pmx');
 const exec = require('shelljs').exec;
 
+const configFile = pmx.initModule();
+
 const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  socketMode: true,
-  appToken: process.env.SLACK_APP_TOKEN,
-  port: process.env.SLACK_APP_PORT || 6666
+  token: configFile["SLACK_BOT_TOKEN"],
+  signingSecret: configFile["SLACK_SIGNING_SECRET"],
+  // socketMode: true,
+  // appToken: process.env.SLACK_APP_TOKEN,
+  port: configFile["SLACK_PORT"] || 6666
 });
 
 app.message('hello', async ({ message, say }) => {
@@ -118,7 +120,7 @@ app.action('button-reload', async ({ body, ack, say }) => {
 
   // const response =  await restart('BinaryStrapi');
 
-  const { err, response } = await describe('BinaryStrapi');
+  const { err, response } = await describe('app');
 
   if (!response) {
     await say('App is not running. Please start ecosystem manually.')
