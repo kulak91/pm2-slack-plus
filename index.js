@@ -68,7 +68,7 @@ pm2.launchBus(function (err, bus) {
   if (moduleConfig.log) {
     bus.on('log:out', function (data) {
       // if (data.process.name === 'pm2-slack-plus') { return; } // Ignore messages of own module.
-
+      if (data.process.name === 'app' && data.data.includes('POST') && data.data.includes('GET')) { return; } // Ignore HTTP messages
       const parsedLog = parseIncommingLog(data.data);
       slackUrlRouter.addMessage({
         name: parseProcessName(data.process),

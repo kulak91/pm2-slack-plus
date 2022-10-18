@@ -10,8 +10,6 @@ const configFile = pmx.initModule();
 const app = new App({
   token: configFile["SLACK_BOT_TOKEN"],
   signingSecret: configFile["SLACK_SIGNING_SECRET"],
-  // socketMode: true,
-  // appToken: process.env.SLACK_APP_TOKEN,
   port: configFile["SLACK_PORT"] || 6666
 });
 
