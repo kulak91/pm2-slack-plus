@@ -13,7 +13,7 @@ const app = new App({
   port: configFile["SLACK_PORT"] || 6666
 });
 
-app.message('hello', async ({ message, say }) => {
+app.message('hi', async ({ message, say }) => {
   await say(`Hey there <@${message.user}>!\nIf you want to see the list of available commands type in chat: "help"`);
 });
 
