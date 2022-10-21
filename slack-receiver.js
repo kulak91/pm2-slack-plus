@@ -184,11 +184,22 @@ async function catchAction({ body, next, ack }) {
   console.log('Action: ', body);
   await next();
 }
-app.action(catchAction, async ({ body, logger }) => logger.info(body.action_ts, body.actions, body.callback_id, body.attachment_id, body.trigger_id, body.container, body.state, body.view));
+app.action(catchAction, async ({ body, logger }) => logger.info([body], body.action_ts, body.actions, body.callback_id, body.attachment_id, body.trigger_id, body.container, body.state, body.view));
 // The listener only receives messages from humans
 app.message(catchMessage, async ({ message, logger }) => logger.info(
   message
 ));
+
+app.action('stop_ecosystem', async ({ body, ack, say }) => {
+  await ack();
+
+  const isConfirmed = body.actions.filter(action => action.value === 'stop_ecosystem_confirm')
+
+  if (isConfirmed) {
+    await say('Action confirmed')
+  }
+
+});
 
 
 
