@@ -174,13 +174,23 @@ app.message('thx', async ({ message, say }) => {
 });
 
 
-app.action(callback_id, async ({ body, ack, say }) => {
-  await ack();
+async function catchMessage({ message, next }) {
+  console.log('Message: ', message)
+  await next();
 
-  // if (body?.user) {
-  // await say(`<@${body.user.id}> is viewing the deployment info`);
-  // }
-  console.log('Action:', callback_id);
-});
+}
+async function catchAction({ body, next, ack }) {
+  await ack();
+  console.log('Action: ', body);
+  await next();
+}
+app.action(catchAction, async ({ body, logger }) => logger.info(`Body: ${body}`));
+// The listener only receives messages from humans
+app.message(catchMessage, async ({ message, logger }) => logger.info(
+  `Message: ${message}`
+));
+
+
+
 
 module.exports = app;
