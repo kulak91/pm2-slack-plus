@@ -37,7 +37,7 @@ app.message('emergency_stop', async ({ message, say }) => {
             "text": "Thermonuclear War",
             "style": "danger",
             "type": "button",
-            "value": "war",
+            "value": "stop_ecosystem_confirm",
             "confirm": {
               "title": "Are you sure?",
               "text": "This will stop server process.",
@@ -51,7 +51,7 @@ app.message('emergency_stop', async ({ message, say }) => {
   })
 });
 
-app.action('stop_ecosystem', async ({ body, ack, say }) => {
+app.action('stop_ecosystem_confirm', async ({ body, ack, say }) => {
   await ack();
 
   console.log('Body:', body);
