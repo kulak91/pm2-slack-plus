@@ -197,9 +197,10 @@ app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
   await say('Process stopped.');
 })
 
-app.action({ text: 'View Job' }, async ({ body, ack, say }) => {
+app.action({ type: 'button' }, async ({ body, ack, say }) => {
   await ack();
-  await say(`<@${body.user.id} is viewing deployment info.`)
+  console.log('Button body: ', body);
+  // await say(`<@${body.user.id} is viewing deployment info.`)
 });
 
 
