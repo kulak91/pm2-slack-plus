@@ -189,7 +189,7 @@ async function catchAction({ body, next, ack }) {
 // app.message(catchMessage, async ({ message, logger }) => logger.info(
 //   message
 // ));
-app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack }) => {
+app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
   await ack();
   console.log('Body:', body);
   await say(JSON.stringify(body));
