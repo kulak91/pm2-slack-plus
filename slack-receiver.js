@@ -189,8 +189,13 @@ app.action(catchAction, async ({ body, logger }) => logger.info([body], body.act
 // app.message(catchMessage, async ({ message, logger }) => logger.info(
 //   message
 // ));
+app.action('stop_ecosystem', async ({ body, ack }) => {
+  await ack();
+  console.log('Body:', body);
+  await say(JSON.stringify(body));
+})
 
-app.view('stop_ecosystem', async ({ body, ack, view }) => {
+app.view('stop_ecosystem', async ({ ack, view }) => {
   await ack();
 
   await say(`Viewing: , ${view}`)
