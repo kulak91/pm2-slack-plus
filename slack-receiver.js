@@ -174,21 +174,21 @@ app.message('thx', async ({ message, say }) => {
 });
 
 
-async function catchMessage({ message, next }) {
-  console.log('Message: ', message)
-  await next();
+// async function catchMessage({ message, next }) {
+//   console.log('Message: ', message)
+//   await next();
 
-}
+// }
 async function catchAction({ body, next, ack }) {
-  await ack();
+  // await ack();
   console.log('Action: ', body);
   await next();
 }
 app.action(catchAction, async ({ body, logger }) => logger.info([body], body.action_ts, body.actions, body.callback_id, body.attachment_id, body.trigger_id, body.container, body.state, body.view));
 // The listener only receives messages from humans
-app.message(catchMessage, async ({ message, logger }) => logger.info(
-  message
-));
+// app.message(catchMessage, async ({ message, logger }) => logger.info(
+//   message
+// ));
 
 app.action('stop_ecosystem', async ({ body, ack, say }) => {
   await ack();
