@@ -187,7 +187,7 @@ async function catchAction({ body, next, ack }) {
 app.action(catchAction, async ({ body, logger }) => logger.info(`Body: ${body}`));
 // The listener only receives messages from humans
 app.message(catchMessage, async ({ message, logger }) => logger.info(
-  `Message: ${message}`
+  message
 ));
 
 
