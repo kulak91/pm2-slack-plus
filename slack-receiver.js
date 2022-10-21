@@ -190,10 +190,19 @@ app.action(catchAction, async ({ body, logger }) => logger.info([body], body.act
 //   message
 // ));
 
-app.action('stop_ecosystem', async ({ body, ack, say }) => {
+app.view('stop_ecosystem', async ({ body, ack, view }) => {
   await ack();
 
-  const isConfirmed = body.actions.filter(action => action.value === 'stop_ecosystem_confirm')
+  await say(`Viewing: , ${view}`)
+
+  const viewing = view.notify_on_close;
+  const blocks = view.blocks;
+  await say(`${viewing, blocks}`);
+
+
+  if (!body) return;
+  await say(`Body: , ${body}`);
+  const isConfirmed = body?.actions.filter(action => action.value === 'stop_ecosystem_confirm')
 
   if (isConfirmed) {
     await say('Action confirmed')
