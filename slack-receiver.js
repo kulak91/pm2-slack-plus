@@ -184,7 +184,7 @@ async function catchAction({ body, next, ack }) {
   console.log('Action: ', body);
   await next();
 }
-app.action(catchAction, async ({ body, logger }) => logger.info(`Body: ${body}`));
+app.action(catchAction, async ({ body, logger }) => logger.info(body));
 // The listener only receives messages from humans
 app.message(catchMessage, async ({ message, logger }) => logger.info(
   message
