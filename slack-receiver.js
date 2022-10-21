@@ -174,13 +174,13 @@ app.message('thx', async ({ message, say }) => {
 });
 
 
-app.action('SShh', async ({ body, ack, say }) => {
+app.action(callback_id, async ({ body, ack, say }) => {
   await ack();
 
-  if (body?.user) {
-    await say(`<@${body.user.id}> is viewing the deployment info`);
-  }
-  console.log('Body:', body);
+  // if (body?.user) {
+  // await say(`<@${body.user.id}> is viewing the deployment info`);
+  // }
+  console.log('Action:', callback_id);
 });
 
 module.exports = app;
