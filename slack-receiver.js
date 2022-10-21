@@ -7,6 +7,9 @@ const exec = require('shelljs').exec;
 
 const configFile = pmx.initModule();
 
+
+const adminUsers = ['U045UMM99FC', 'U044B66LTUZ'];
+
 const app = new App({
   token: configFile["SLACK_BOT_TOKEN"],
   signingSecret: configFile["SLACK_SIGNING_SECRET"],
@@ -143,12 +146,10 @@ app.action('button-reload', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
 
-  const adminUsers = ['U045UMM99FC', 'U044B66LTUZ'];
-
-  await say(`<@${body.user.id}> clicked the button\nHe wants to restart ecosystem`);
+  await say(`<@${body.user.id}> wants to restart ecosystem`);
 
   if (!adminUsers.find(user => user === body.user.id)) {
-    await say(`<@${body.user.name}> has no permissions to reload.`);
+    await say(`But <@${body.user.name}> has no permissions to reload.`);
     return;
   }
 
@@ -174,46 +175,47 @@ app.message('thx', async ({ message, say }) => {
 });
 
 
-// async function catchMessage({ message, next }) {
-//   console.log('Message: ', message)
-//   await next();
-
-// }
-async function catchAction({ body, next, ack }) {
-  // await ack();
-  console.log('Action: ', body);
-  await next();
-}
-// app.action(catchAction, async ({ body, logger }) => logger.info([body], body.action_ts, body.actions, body.callback_id, body.attachment_id, body.trigger_id, body.container, body.state, body.view));
-// The listener only receives messages from humans
-// app.message(catchMessage, async ({ message, logger }) => logger.info(
-//   message
-// ));
 app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
   await ack();
-  console.log('Body:', body);
-  await say(JSON.stringify(body));
-})
 
-app.view('stop_ecosystem', async ({ ack, view }) => {
-  await ack();
-
-  await say(`Viewing: , ${view}`)
-
-  const viewing = view.notify_on_close;
-  const blocks = view.blocks;
-  await say(`${viewing, blocks}`);
-
-
-  if (!body) return;
-  await say(`Body: , ${body}`);
-  const isConfirmed = body?.actions.filter(action => action.value === 'stop_ecosystem_confirm')
-
-  if (isConfirmed) {
-    await say('Action confirmed')
+  if (!adminUsers.find(user => user === body.user.id)) {
+    await say(`<@${body.user.name}> has no permissions to reload.`);
+    return;
   }
 
-});
+  const { err, response } = await describe('app');
+
+  if (!response) {
+    await say('App is not running. Please start ecosystem manually.')
+    return;
+  }
+
+  const serverPath = path.resolve(response?.pm2_env?.pm_cwd);
+  const child = exec(`cd ${serverPath}; pm2 stop ecosystem.config.js`, { async: true });
+
+
+  await say('Process stopped.');
+})
+
+// app.view('stop_ecosystem', async ({ ack, view, say }) => {
+//   await ack();
+
+//   await say(`Viewing: , ${view}`)
+
+//   const viewing = view.notify_on_close;
+//   const blocks = view.blocks;
+//   await say(`${viewing, blocks}`);
+
+
+//   if (!body) return;
+//   await say(`Body: , ${body}`);
+//   const isConfirmed = body?.actions.filter(action => action.value === 'stop_ecosystem_confirm')
+
+//   if (isConfirmed) {
+//     await say('Action confirmed')
+//   }
+
+// });
 
 
 
