@@ -18,7 +18,43 @@ app.message('hi', async ({ message, say }) => {
 });
 
 app.message('help', async ({ message, say }) => {
-  await say(`*List of available commands:*\ntype 'list' - to see the list of PM2 processes`);
+  await say(`*List of available commands:*\ntype 'list' - to see the list of PM2 processes\ntype 'emergency_stop' - to stop PM2 processes`);
+});
+
+app.message('emergency_stop', async ({ message, say }) => {
+  await say({
+    "text": "Are you sure you want to stop ecosystem.config file?",
+    "attachments": [
+      {
+        "text": "Please confirm",
+        "fallback": "Confirm stop",
+        "callback_id": "stop_ecosystem",
+        "color": "#3AA3E3",
+        "attachment_type": "default",
+        "actions": [
+          {
+            "name": "game",
+            "text": "Thermonuclear War",
+            "style": "danger",
+            "type": "button",
+            "value": "war",
+            "confirm": {
+              "title": "Are you sure?",
+              "text": "This will stop server process.",
+              "ok_text": "Yes",
+              "dismiss_text": "No"
+            }
+          }
+        ]
+      }
+    ]
+  })
+});
+
+app.action('stop_ecosystem', async ({ body, ack, say }) => {
+  await ack();
+
+  console.log('Body:', body);
 });
 
 app.message('list', async ({ message, say }) => {
@@ -76,7 +112,7 @@ app.message('list', async ({ message, say }) => {
         ]
       }
     )
-    // if (proc.pm2_env.status !== "online") {
+    // if (proc.pm2_env.status === "errored") {
     //   answer.blocks.push()
     // }
   }
@@ -137,5 +173,14 @@ app.message('thx', async ({ message, say }) => {
   await say(`You're welcome <@${message.user}>!`);
 });
 
+
+app.action('SShh', async ({ body, ack, say }) => {
+  await ack();
+
+  if (body?.user) {
+    await say(`<@${body.user.id}> is viewing the deployment info`);
+  }
+  console.log('Body:', body);
+});
 
 module.exports = app;
