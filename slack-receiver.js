@@ -204,7 +204,7 @@ app.message('info_app', async ({ message, client, say, payload }) => {
   // payload.files = data;
   try {
     const data = await fs.readFile('/root/.pm2/logs/app-out.log', { encoding: 'utf8' });
-    const result = await client.files.upload({ file: data, channels: message.channel });
+    const result = await client.files.upload({ file: data });
     const files = await client.files.list({ channel: message.channel });
     // await say(data);
     // console.log(data);
