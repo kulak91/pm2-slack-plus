@@ -208,7 +208,7 @@ app.message('info_app', async ({ message, client, say, payload }) => {
     const filePath = '/root/app/logs/strapi-out.log';
     const data = await fs.readFile(filePath);
     const fileName = path.basename(filePath);
-    const fileNameDate = fileName + data.toLocaleString();
+    const fileNameDate = fileName + ' ' + date.toLocaleString();
     await client.files.upload({ file: data, channels: message.channel, filename: fileNameDate, token: configFile["SLACK_BOT_TOKEN"] });
   } catch (err) {
     console.log(err);
