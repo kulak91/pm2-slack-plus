@@ -1,6 +1,6 @@
 {
   "name": "pm2-slack-plus",
-  "version": "2.2.34",
+  "version": "2.2.35",
   "description": "A PM2 module to emit events to Slack and more",
   "apps": [
     {
