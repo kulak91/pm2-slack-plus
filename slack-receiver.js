@@ -24,7 +24,7 @@ app.message('hi', async ({ message, say }) => {
 });
 
 app.message('help', async ({ message, say }) => {
-  await say(`*List of available commands:*\ntype 'list' - to see the list of PM2 processes\ntype 'emergency_stop' - to stop PM2 processes`);
+  await say(`*List of available commands:*\ntype 'list' - to see the list of PM2 processes\ntype 'emergency_stop' - to stop PM2 processes\ntype 'info_app' - to upload the lastest log file`);
 });
 
 app.message('emergency_stop', async ({ message, say }) => {
