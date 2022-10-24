@@ -5,6 +5,8 @@ const { timeSince } = require('./utils');
 const path = require('path');
 const pmx = require('pmx');
 const exec = require('shelljs').exec;
+// const FormData = require('form-data');
+
 
 const configFile = pmx.initModule();
 
@@ -203,9 +205,10 @@ app.message('info_app', async ({ message, client, say, payload }) => {
   // const said = await client.chat.
   // payload.files = data;
   try {
-    const data = await fs.readFile('/root/.pm2/logs/app-out.log', { encoding: 'utf8' });
+    const data = await fs.readFile('/root/app/logs/strapi-out.log', { encoding: 'utf8' });
+    console.log('Data: ', data.slice(-100));
     const result = await client.files.upload({ file: data, channels: message.channel, token: configFile["SLACK_BOT_TOKEN"] });
-    const files = await client.files.list({ channel: message.channel });
+    // const files = await client.files.list({ channel: message.channel });
     // await say(data);
     // console.log(data);
   } catch (err) {
