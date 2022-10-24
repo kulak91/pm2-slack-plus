@@ -1,4 +1,5 @@
 const { App } = require('@slack/bolt');
+const fs = require('fs/promises');
 const { list, restart, describe } = require('./pm2-helper');
 const { timeSince } = require('./utils');
 const path = require('path');
@@ -197,34 +198,19 @@ app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
   await say('Process stopped.');
 })
 
-app.action({ type: 'button' }, async ({ body, ack, say }) => {
-  await ack();
-  console.log('Button body: ', body);
-  // await say(`<@${body.user.id} is viewing deployment info.`)
+app.message('info_app', async ({ message, say }) => {
+
+
+
+  try {
+    const data = await fs.readFile('/root/.pm2/logs/app-out.log', { encoding: 'utf8' });
+    await say(data);
+    // console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+
 });
-
-
-// app.view('stop_ecosystem', async ({ ack, view, say }) => {
-//   await ack();
-
-//   await say(`Viewing: , ${view}`)
-
-//   const viewing = view.notify_on_close;
-//   const blocks = view.blocks;
-//   await say(`${viewing, blocks}`);
-
-
-//   if (!body) return;
-//   await say(`Body: , ${body}`);
-//   const isConfirmed = body?.actions.filter(action => action.value === 'stop_ecosystem_confirm')
-
-//   if (isConfirmed) {
-//     await say('Action confirmed')
-//   }
-
-// });
-
-
 
 
 module.exports = app;
