@@ -203,13 +203,11 @@ app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
 app.message('info_app', async ({ message, client, say, payload }) => {
 
   try {
-    const date = new Date();
 
     const filePath = '/root/app/logs/strapi-out.log';
     const data = await fs.readFile(filePath);
     const fileName = path.basename(filePath);
-    const fileNameDate = fileName + '_' + date.toLocaleString().split(',')[0];
-    await client.files.upload({ file: data, channels: message.channel, filename: fileNameDate, token: configFile["SLACK_BOT_TOKEN"] });
+    await client.files.upload({ file: data, channels: message.channel, filename: fileName, token: configFile["SLACK_BOT_TOKEN"] });
   } catch (err) {
     console.log(err);
   }
