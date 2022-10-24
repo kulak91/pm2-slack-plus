@@ -198,13 +198,14 @@ app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
   await say('Process stopped.');
 })
 
-app.message('info_app', async ({ message, say }) => {
+app.message('info_app', async ({ message, client, say }) => {
 
-
+  // const said = await client.chat.
 
   try {
     const data = await fs.readFile('/root/.pm2/logs/app-out.log', { encoding: 'utf8' });
-    await say(data);
+    const result = await client.files.upload({ file: data, channels: 'C0465PFG4SD', })
+    // await say(data);
     // console.log(data);
   } catch (err) {
     console.log(err);
