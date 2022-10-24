@@ -205,9 +205,10 @@ app.message('info_app', async ({ message, client, say, payload }) => {
   // const said = await client.chat.
   // payload.files = data;
   try {
-    const data = await fs.readFile('/root/app/logs/strapi-out.log', { encoding: 'utf8' });
-    console.log('Data: ', data.slice(-100));
-    const result = await client.files.upload({ file: '/root/app/logs/strapi-out.log', channels: message.channel, token: configFile["SLACK_BOT_TOKEN"] });
+    const filePath = '/root/app/logs/strapi-out.log';
+    const data = await fs.readFile(filePath);
+    const fileName = path.basename(filePath);
+    await client.files.upload({ file: data, channels: message.channel, filename: fileName, token: configFile["SLACK_BOT_TOKEN"] });
     // const files = await client.files.list({ channel: message.channel });
     // await say(data);
     // console.log(data);
