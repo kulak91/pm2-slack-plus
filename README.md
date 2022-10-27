@@ -23,7 +23,7 @@ pm2 set pm2-slack-plus:SLACK_ADMINS 'slack_user_id slack_user1_id slack_user2_id
 ## Reading logs 
 
 ```
-pm2 set pm2-slack-plus:LOGS_PATH '/somepath/server/aa/etc/logs';
+pm2 set pm2-slack-plus:LOGS_PATH '/somepath/server/aa/etc/logs/';
 ```
 
 Set same log path to ecosystem.config in your app :
@@ -35,8 +35,8 @@ module.exports = {
       name: 'app',
       script: 'npm',
       args: 'start',
-      error_file: LOG_PATH/yourapp-error.log',
-      out_file: LOG_PATH/yourapp-out.log'
+      error_file: `${LOG_PATH}yourapp-error.log`,
+      out_file: `${LOG_PATH}yourapp-out.log`
     },
   ],
 };
