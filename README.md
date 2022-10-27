@@ -99,21 +99,3 @@ pm2 set pm2-slack:servername-foo Bar-server
 # Note: The `pm2-slack:buffer_seconds`=5 will be used from global options for this process. 
 ```
   
-
-## Contributing
-
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.
-
-## Release History
-- 1.1.0 Custom options can be defined to each PM2 process.
-        Displaying process ID of cluster mode processes (thanks @abawchen). 
-- 1.0.0 Message bufferring refactored. Message grouping refactored.
-        Added datetime parsing from log messages.
-- 0.3.4 Added an option to override the Slack username
-- 0.3.3 Added documentation for the reload event
-- 0.3.2 Fixed Half width of error and log messages (thanks @ma-zal)
-- 0.3.1 Fixed Double escaping of error and log messages (thanks @ma-zal)
-- 0.3.0 Switched to a default buffer system that groups alike messages by timestamp in the same message to Slack (thanks @kjhangiani)
-- 0.2.0 Implemented a rate limiting system and updated all the dependencies
-- 0.1.1 Commenting & Clean up
-- 0.1.0 Initial Release
