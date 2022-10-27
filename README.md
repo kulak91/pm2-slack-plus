@@ -17,7 +17,7 @@ To get the Slack URL, you need to setup an Incoming Webhook. More details on how
 ## Reading logs 
 
 ```
-pm2 set pm2-slack-plus:LOG_PATH '/somepath/server/aa/etc/logs';
+pm2 set pm2-slack-plus:LOGS_PATH '/somepath/server/aa/etc/logs';
 
 ```
 
