@@ -15,6 +15,7 @@ const reloadButton = require('./src/button-reload.json');
 
 
 const adminUsers = configFile["SLACK_ADMIN_USERS"].split(' ');
+const logsPath = configFile["LOGS_PATH"]
 
 const app = new App({
   token: configFile["SLACK_BOT_TOKEN"],
@@ -153,8 +154,6 @@ app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
 
 app.message('info_app', async ({ message, client, say }) => {
 
-  const filePath = '/home/kulak/work/website/server/logs/';
-
   const template = {
     "text": "Strapi Logs",
     "type": "modal",
@@ -195,7 +194,7 @@ app.message('info_app', async ({ message, client, say }) => {
   }
 
   try {
-    const files = await fs.readdir(filePath);
+    const files = await fs.readdir(logsPath);
     for (const file of files) {
       template.blocks[0].accessory.options.push({
         "text": {
