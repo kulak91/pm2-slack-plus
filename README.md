@@ -1,7 +1,8 @@
 # pm2-slack-plus
 
-This is a PM2 Module for sending events & logs from your PM2 processes to Slack.
-
+- This is a PM2 Module for sending events & logs from your PM2 processes to Slack.
+- In addition this module uses official slack/bolt framework. You can check info about this app here: https://api.slack.com/start/building/bolt-js
+- To make bolt app work you need to set proxy from app port to your deployed app link
 ## Install
 
 To install and setup pm2-slack-plus, run the following commands:
@@ -23,7 +24,6 @@ pm2 set pm2-slack-plus:SLACK_ADMINS 'slack_user_id slack_user1_id slack_user2_id
 
 ```
 pm2 set pm2-slack-plus:LOGS_PATH '/somepath/server/aa/etc/logs';
-
 ```
 
 Set same log path to ecosystem.config in your app :
@@ -41,7 +41,6 @@ module.exports = {
     },
   ],
 };
-
 ```
 
 
