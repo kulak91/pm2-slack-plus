@@ -13,6 +13,33 @@ pm2 set pm2-slack-plus:slack_url https://slack_url
 
 To get the Slack URL, you need to setup an Incoming Webhook. More details on how to set this up can be found here: https://api.slack.com/incoming-webhooks
 
+
+## Reading logs 
+
+```
+pm2 set pm2-slack-plus:LOG_PATH '/somepath/server/aa/etc/logs';
+
+```
+
+Set same log path to ecosystem.config in your app :
+
+```
+module.exports = {
+  apps: [
+    {
+      name: 'app',
+      script: 'npm',
+      args: 'start',
+      error_file: LOG_PATH/yourapp-error.log',
+      out_file: LOG_PATH/yourapp-out.log',
+      log_type: 'json'
+    },
+  ],
+};
+
+```
+
+
 ## Events subscription configuration
 
 The following events can be subscribed to:

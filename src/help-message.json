@@ -1,0 +1,22 @@
+{
+  "text": "Commands available: list, emergency_stop, info_app",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "List of available commands"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*list* - display current PM2 processes\n*emergency_stop* - stop PM2 processess\n*info_app* - upload the lastest log file"
+      }
+    }
+  ]
+}

@@ -1,17 +1,20 @@
 const { App } = require('@slack/bolt');
 const fs = require('fs/promises');
-const { list, restart, describe } = require('./pm2-helper');
+const { list, describe } = require('./pm2-helper');
 const { timeSince } = require('./utils');
 const path = require('path');
 const pmx = require('pmx');
 const exec = require('shelljs').exec;
-// const FormData = require('form-data');
 
 
 const configFile = pmx.initModule();
 
+const confirmStopServer = require('./src/confirmation.json');
+const helpMessage = require('./src/help-message.json');
+const reloadButton = require('./src/button-reload.json');
 
-const adminUsers = ['U045UMM99FC', 'U044B66LTUZ'];
+
+const adminUsers = configFile["SLACK_ADMIN_USERS"].split(' ');
 
 const app = new App({
   token: configFile["SLACK_BOT_TOKEN"],
@@ -19,51 +22,20 @@ const app = new App({
   port: configFile["SLACK_PORT"] || 6666
 });
 
+
 app.message('hi', async ({ message, say }) => {
   await say(`Hey there <@${message.user}>!\nIf you want to see the list of available commands type in chat: "help"`);
 });
 
-app.message('help', async ({ message, say }) => {
-  await say(`*List of available commands:*\ntype 'list' - to see the list of PM2 processes\ntype 'emergency_stop' - to stop PM2 processes\ntype 'info_app' - to upload the lastest log file`);
+app.message('help', async ({ say }) => {
+  await say(helpMessage);
 });
 
-app.message('emergency_stop', async ({ message, say }) => {
-  await say({
-    "text": "Are you sure you want to stop ecosystem.config file?",
-    "attachments": [
-      {
-        "text": "Please confirm",
-        "fallback": "Confirm stop",
-        "callback_id": "stop_ecosystem",
-        "color": "#3AA3E3",
-        "attachment_type": "default",
-        "actions": [
-          {
-            "name": "game",
-            "text": "Thermonuclear War",
-            "style": "danger",
-            "type": "button",
-            "value": "stop_ecosystem_confirm",
-            "confirm": {
-              "title": "Are you sure?",
-              "text": "This will stop server process.",
-              "ok_text": "Yes",
-              "dismiss_text": "No"
-            }
-          }
-        ]
-      }
-    ]
-  })
+app.message('emergency_stop', async ({ say }) => {
+  await say(confirmStopServer)
 });
 
-app.action('stop_ecosystem_confirm', async ({ body, ack, say }) => {
-  await ack();
-
-  console.log('Body:', body);
-});
-
-app.message('list', async ({ message, say }) => {
+app.message('list', async ({ say }) => {
   const status = {
     online: "\u{1F7E2}",
     stopping: "\u{1F6AB}",
@@ -122,41 +94,20 @@ app.message('list', async ({ message, say }) => {
     //   answer.blocks.push()
     // }
   }
-  answer.blocks.push(
-    {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": `Force reload *ecosystem.config* : `
-      },
-      "accessory": {
-        "type": "button",
-        "text": {
-          "type": "plain_text",
-          "text": "Reload",
-          "emoji": true
-        },
-        "style": "primary",
-        "value": `reload`,
-        "action_id": `button-reload`
-      }
-    })
+  answer.blocks.push(reloadButton);
   await say(answer)
 }
 );
 
 app.action('button-reload', async ({ body, ack, say }) => {
-  // Acknowledge the action
   await ack();
 
-  await say(`<@${body.user.id}> wants to restart ecosystem`);
-
   if (!adminUsers.find(user => user === body.user.id)) {
-    await say(`But <@${body.user.name}> has no permissions to reload.`);
+    await say(`<@${body.user.name}> has no permissions to reload.`);
     return;
   }
 
-  // const response =  await restart('BinaryStrapi');
+  // const response =  await restart('app');
 
   const { err, response } = await describe('app');
 
@@ -196,22 +147,89 @@ app.action({ callback_id: 'stop_ecosystem' }, async ({ body, ack, say }) => {
   const serverPath = path.resolve(response?.pm2_env?.pm_cwd);
   const child = exec(`cd ${serverPath}; pm2 stop ecosystem.config.js`, { async: true });
 
-
   await say('Process stopped.');
-})
+});
 
-app.message('info_app', async ({ message, client, say, payload }) => {
 
-  try {
-    const date = new Date();
-    const filePath = '/root/app/logs/strapi-out.log';
-    const data = await fs.readFile(filePath);
-    const fileName = 'strapi-out.log';
-    await client.files.upload({ file: data, channels: message.channel, title: date.toLocaleString(), filename: fileName, token: configFile["SLACK_BOT_TOKEN"] });
-  } catch (err) {
-    console.log(err);
+app.message('info_app', async ({ message, client, say }) => {
+
+  const filePath = '/home/kulak/work/website/server/logs/';
+
+  const template = {
+    "text": "Strapi Logs",
+    "type": "modal",
+    "submit": {
+      "type": "plain_text",
+      "text": "Submit",
+      "emoji": true
+    },
+    "close": {
+      "type": "plain_text",
+      "text": "Cancel",
+      "emoji": true
+    },
+    "title": {
+      "type": "plain_text",
+      "text": "List of logs",
+      "emoji": true
+    },
+    "blocks": [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "Pick a log from the dropdown"
+        },
+        "accessory": {
+          "type": "multi_static_select",
+          "placeholder": {
+            "type": "plain_text",
+            "text": "Select log",
+            "emoji": true
+          },
+          "options": [],
+          "action_id": "multi_static_select_logs"
+        }
+      }
+    ]
   }
 
+  try {
+    const files = await fs.readdir(filePath);
+    for (const file of files) {
+      template.blocks[0].accessory.options.push({
+        "text": {
+          "type": "plain_text",
+          "text": `${file}`,
+          "emoji": true
+        },
+        "value": `${file}`
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  await say(template);
+
+
+});
+
+app.action({ action_id: "multi_static_select_logs" }, async ({ ack, action, body, say, client }) => {
+  await ack();
+  let finalOptions = [];
+  action.selected_options.forEach(option => finalOptions.push(option.value));
+  await say(`<@${body.user.id}> selected: ${finalOptions}`);
+  await Promise.all(finalOptions.map(async (option) => {
+    try {
+      const date = new Date();
+      const filePath = configFile["LOGS_PATH"] + option;
+      const data = await fs.readFile(filePath);
+      await client.files.upload({ file: data, channels: body.channel.id, title: date.toLocaleString(), filename: option, token: configFile["SLACK_BOT_TOKEN"] });
+    } catch (err) {
+      console.log(err);
+    }
+  }))
 });
 
 

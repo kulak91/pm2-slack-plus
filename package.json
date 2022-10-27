@@ -49,6 +49,8 @@
     "SLACK_SIGNING_SECRET": "",
     "SLACK_BOT_TOKEN": "",
     "SLACK_APP_TOKEN": "",
-    "SLACK_PORT": ""
+    "SLACK_PORT": "",
+    "SLACK_ADMIN_USERS": "U045UMM99FC U044B66LTUZ",
+    "LOGS_PATH": ""
   }
 }

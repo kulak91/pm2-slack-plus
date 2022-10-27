@@ -1,0 +1,18 @@
+{
+  "type": "section",
+  "text": {
+    "type": "mrkdwn",
+    "text": "Force reload *ecosystem.config* : "
+  },
+  "accessory": {
+    "type": "button",
+    "text": {
+      "type": "plain_text",
+      "text": "Reload",
+      "emoji": true
+    },
+    "style": "primary",
+    "value": "reload",
+    "action_id": "button-reload"
+  }
+}
