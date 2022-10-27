@@ -14,9 +14,9 @@ pm2 set pm2-slack-plus:SLACK_BOT_TOKEN=xoxb-aaaaa-aaaaa-aaaaa
 pm2 set pm2-slack-plus:SLACK_ADMINS 'slack_user_id slack_user1_id slack_user2_id ...'
 ```
 
-To get the Slack URL, you need to setup an Incoming Webhook. More details on how to set this up can be found here: https://api.slack.com/incoming-webhooks
-To get Signing secret visit https://api.slack.com/apps  -> your app -> Settings -> Basic Information
-To get Slack Bot Token subscribe slack to bot events, allow permissions to read/wirte: files/messages and receive "Bot User OAuth Token",  invite bot to your channel (/invite @yourbotname) 
+- To get the Slack URL, you need to setup an Incoming Webhook. More details on how to set this up can be found here: https://api.slack.com/incoming-webhooks
+- To get Signing secret visit https://api.slack.com/apps  -> your app -> Settings -> Basic Information
+- To get Slack Bot Token subscribe slack to bot events, allow permissions to read/wirte: files/messages and receive "Bot User OAuth Token",  invite bot to your channel (/invite @yourbotname) 
 
 
 ## Reading logs 
