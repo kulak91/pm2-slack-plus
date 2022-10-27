@@ -36,8 +36,7 @@ module.exports = {
       script: 'npm',
       args: 'start',
       error_file: LOG_PATH/yourapp-error.log',
-      out_file: LOG_PATH/yourapp-out.log',
-      log_type: 'json'
+      out_file: LOG_PATH/yourapp-out.log'
     },
   ],
 };
